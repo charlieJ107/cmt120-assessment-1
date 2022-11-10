@@ -22,12 +22,12 @@ def importModule(module_name):
     # now drag them in
     globals().update({k: getattr(mdl, k) for k in names})
 
-try:
-    mod = sys.argv[1].split('.')[0]
-    importModule(mod)
-except IndexError as ie:
-    sys.exit('Please, provide the name of the file to test.')
-
+# try:
+#     mod = sys.argv[1].split('.')[0]
+#     importModule(mod)
+# except IndexError as ie:
+#     sys.exit('Please, provide the name of the file to test.')
+from template import *
 
 # Testing function
 def runTest(call, output):
