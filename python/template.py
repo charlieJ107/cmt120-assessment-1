@@ -83,13 +83,53 @@ def exercise2(breed, height, weight, male):
 # Exercise 3 - Basic Statistics
 
 
-def exercise3(l):
-    return None
+def exercise3(origin: list):
+    squared = []
+    origin.sort()
+    sum_origin = 0
+    sum_sqared = 0
+    for i in origin:
+        sum_origin += i
+        sq = i * i
+        squared.append(sq)
+        sum_sqared += sq
+    squared.sort()
+    if len(origin) % 2 == 0:
+        mid_origin = (origin[int((len(origin) / 2) - 1)] +
+                      origin[int(len(origin)/2)]) / 2
+        mid_squared = (squared[int((len(squared) / 2) - 1)] +
+                       squared[int(len(squared) / 2)]) / 2
+    else:
+        mid_origin = origin[int(len(origin) / 2)]
+        mid_squared = squared[int(len(squared) / 2)]
+
+    origin_ave = sum_origin / len(origin)
+    if origin_ave % 1 == 0:
+        origin_ave = int(origin_ave)
+    squared_ave = sum_sqared / len(squared)
+    if squared_ave % 1 == 0:
+        squared_ave = int(squared_ave)
+
+    return [
+        (
+            origin[0],
+            origin_ave,
+            mid_origin,
+            origin[-1]
+        ),
+        (
+            squared[0],
+            squared_ave,
+            mid_squared,
+            squared[-1]
+        )
+    ]
+
 
 # Exercise 4 - Finite-State Machine Simulator
 
 
-def exercise4(trans:dict, init_state:str, input_list:list):
+def exercise4(trans: dict, init_state: str, input_list: list):
     state_machine = {}
     for key in trans.keys():
         (state, input) = key.split('/')
@@ -102,7 +142,6 @@ def exercise4(trans:dict, init_state:str, input_list:list):
         res.append(state_machine[init_state][inp][1])
         init_state = state_machine[init_state][inp][0]
     return res
-
 
 
 # Exercise 5 - Document Stats
