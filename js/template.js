@@ -125,7 +125,20 @@ module.exports = {
 
     // Exercise 4 - Finite-State Machine Simulator
     exercise4: (trans, init_state, input_list) => {
-        return undefined;
+        state_machine = {}
+        Object.keys(trans).forEach(element => {
+            const input_and_state = element.split('/');
+            const output_and_state = trans[element].split('/');
+            const input_state = input_and_state[0];
+            const input = input_and_state[1];
+            state_machine[input_state][input] = output_and_state;
+        });
+        let res = [];
+        input_list.forEach(element => {
+            res.push(state_machine[init_state][element][1])
+            init_state = state_machine[init_state][element][0]
+        });
+        return res
     },
 
     // Exercise 5 - Document Stats
