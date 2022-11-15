@@ -89,8 +89,21 @@ def exercise3(l):
 # Exercise 4 - Finite-State Machine Simulator
 
 
-def exercise4(trans, init_state, input_list):
-    return None
+def exercise4(trans:dict, init_state:str, input_list:list):
+    state_machine = {}
+    for key in trans.keys():
+        (state, input) = key.split('/')
+        (output_state, output) = trans[key].split('/')
+        if state not in state_machine.keys():
+            state_machine[state] = dict()
+        state_machine[state][input] = (output_state, output)
+    res = []
+    for inp in input_list:
+        res.append(state_machine[init_state][inp][1])
+        init_state = state_machine[init_state][inp][0]
+    return res
+
+
 
 # Exercise 5 - Document Stats
 
