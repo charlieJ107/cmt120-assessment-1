@@ -1,4 +1,41 @@
-
+const exercise1 = (SepalLen, SepalWid, PetalLen, PetalWid) => {
+    let setosa = "setosa";
+    let versicol = "versicolor";
+    let virginic = "virginica";
+    // [2, 2, 5.3, 1.6]
+    if (PetalLen < 2.5) {
+        return setosa;
+    } else if (PetalWid < 1.8) {
+        if (PetalLen < 5) {
+            if (PetalWid < 1.7) {
+                return versicol;
+            }
+            else {
+                return virginic;
+            }
+        } else {
+            if (PetalWid >= 1.6) {
+                if (PetalLen < 7) {
+                    return versicol;
+                } else {
+                    return virginic;
+                }
+            } else {
+                return virginic;
+            }
+        }
+    } else {
+        if (PetalLen < 4.9) {
+            if (SepalLen < 6) {
+                return versicol;
+            } else {
+                return virginic;
+            }
+        } else {
+            return virginic;
+        }
+    }
+}
 const exercise3 = (list) => {
     const sorted_origin = list.sort((a, b) => a - b);
     let sum_origin = 0;
@@ -37,12 +74,82 @@ const exercise3 = (list) => {
 
 }
 
-const testcase = [
-    { input: [[1, 2, 3, 4, 5]], output: [[1, 3, 3, 5], [1, 11, 9, 25]] },
-    { input: [[7, 2, 4, 5]], output: [[2, 4.5, 4.5, 7], [4, 23.5, 20.5, 49]] }
-];
-const res = exercise3(testcase[1].input[0]);
-res.forEach(e => console.log(e));
+const EXERCISE4_TESTS = [
+    {
+        input: [{ "a/0": "a/1", "a/1": "a/0" },
+            'a',
+        ['0', '0', '1', '1', '0', '0']
+        ],
+        output: ['1', '1', '0', '0', '1', '1']
+    },
+    {
+        input: [
+            { "a/0": "a/1", "a/1": "b/0", "b/0": "b/0", "b/1": "a/1" },
+            'a',
+            ['0', '0', '1', '1', '0', '0']
+        ],
+        output: ['1', '1', '0', '1', '1', '1']
+    },
+    {
+        input: [
+            {
+                "0/0": "0/NaN",
+                "0/1": "0/NaN",
+                "0/\n": "0/0",
+                "1/0": "0/NaN",
+                "1/1": "1/NaN",
+                "1/\n": "1/1",
+            },
+            '1',
+            ['1', '1', '\n']
+        ],
+        output: ['NaN', 'NaN', '1']
+    },
+    {
+        input: [
+            {
+                "0/0": "0/NaN",
+                "0/1": "0/NaN",
+                "0/\n": "0/0",
+                "1/0": "0/NaN",
+                "1/1": "1/NaN",
+                "1/\n": "1/1",
+            },
+            '1',
+            ['1', '0', '1', '\n']
+        ],
+        output: ['NaN', 'NaN', 'NaN', '0']
+    }
+]
 
-// [2, 4.5, 6, 7]
-// [4, 23.5, 37, 49]
+const exercise4 = (trans, init_state, input_list) => {
+    state_machine = {}
+    Object.keys(trans).forEach(element => {
+        const input_and_state = element.split('/');
+        const output_and_state = trans[element].split('/');
+        const input_state = input_and_state[0];
+        const input = input_and_state[1];
+        if (state_machine[input_state] === undefined) {
+            state_machine[input_state] = {};
+        }
+        state_machine[input_state][input] = output_and_state;
+    });
+    let res = [];
+    input_list.forEach(element => {
+        res.push(state_machine[init_state][element][1])
+        init_state = state_machine[init_state][element][0]
+    });
+    return res
+}
+
+
+const res = exercise4({
+    "0/0": "0/NaN",
+    "0/1": "0/NaN",
+    "0/\n": "0/0",
+    "1/0": "0/NaN",
+    "1/1": "1/NaN",
+    "1/\n": "1/1",
+}, '1', ['1', '0', '1', '\n']);
+console.log(res);
+//['1', '1', '0', '1', '1', '1']
