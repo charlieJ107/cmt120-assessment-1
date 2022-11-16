@@ -148,13 +148,60 @@ def exercise4(trans: dict, init_state: str, input_list: list):
 
 
 def exercise5(filename):
-    return None
+    with open(filename, 'r') as f:
+        num_alpha = 0
+        num_digit = 0
+        num_symbol = 0
+        num_word = 0
+        num_sentence = 0
+        num_paragraph = 0
+        last = None
+        word_started = False
+        for i in f.read():
+            if i.isalpha():
+                num_alpha += 1
+                if str(last).isspace():
+                    word_started = True
+            elif i == '\n':
+                # TODO paragraph
+                if last == '\n':
+                    num_paragraph += 1
+                word_started = False
+            elif i.isspace():
+                if word_started:
+                    num_word += 1
+                    word_started = False
+            elif i.isdigit():
+                num_digit += 1
+                word_started = False
+            elif i == '.' or i == "?" or i == '!':
+                num_symbol += 1
+                num_sentence += 1
+                word_started = False
+            else:
+                num_symbol += 1
+                word_started = False
+            last = i
 
 # Exercise 6 - List Depth
 
 
 def exercise6(l):
-    return None
+    # Recursive
+    table = 0
+    record = False
+    for i in l:
+        if type(i) == list:
+            record = False
+            ab = exercise6(i)
+            if ab > table:
+                table = ab
+
+    if record == False:
+        return 1
+    else:
+        return table + 1
+
 
 # Exercise 7 - Change, please
 
