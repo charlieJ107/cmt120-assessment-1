@@ -18,7 +18,7 @@ module.exports = {
                     return virginic;
                 }
             } else {
-                if (PetalWid > 1.6) {
+                if (PetalWid >= 1.6) {
                     if (PetalLen < 7) {
                         return versicol;
                     } else {
@@ -131,6 +131,9 @@ module.exports = {
             const output_and_state = trans[element].split('/');
             const input_state = input_and_state[0];
             const input = input_and_state[1];
+            if (state_machine[input_state] === undefined) {
+                state_machine[input_state] = {};
+            }
             state_machine[input_state][input] = output_and_state;
         });
         let res = [];
