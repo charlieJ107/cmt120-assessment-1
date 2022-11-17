@@ -182,6 +182,7 @@ def exercise5(filename):
                 num_symbol += 1
                 word_started = False
             last = i
+        return [num_alpha, num_digit, num_symbol, num_word, num_sentence, num_paragraph]
 
 # Exercise 6 - List Depth
 
@@ -226,3 +227,11 @@ def exercise9(green, yellow, gray):
 
 def exercise10(green, yellow, gray):
     return None
+
+
+### debug start ###
+print(exercise5('test_data/text1.txt'), "need: (128, 8, 10, 36, 3, 3)")
+print(exercise5('test_data/text2.txt'), "need: (84, 0, 3, 19, 1, 4)")
+print(exercise5('test_data/text3.txt'), "need: ((81, 3, 12, 20, 2, 1)")
+print(exercise5('test_data/text4.txt'), "need: (310, 0, 15, 74, 5, 3)")
+### debug end ###
