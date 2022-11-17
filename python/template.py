@@ -77,7 +77,7 @@ def exercise2(breed, height, weight, male):
     minWeight = breedDict[breed][gender]["weight"] * 0.9
     maxWeight = breedDict[breed][gender]["weight"] * 1.1
 
-    return minHeight < height and height < maxHeight and minWeight < weight and weight < maxWeight
+    return minHeight <= height and height <= maxHeight and minWeight <= weight and weight <= maxWeight
 
 
 # Exercise 3 - Basic Statistics
@@ -146,54 +146,85 @@ def exercise4(trans: dict, init_state: str, input_list: list):
 
 # Exercise 5 - Document Stats
 
+# abcd\n
+# abcd\n
+# abcd\n
+# \n
+# bcde\n
+
 
 def exercise5(filename):
+    num_alpha = 0
+    num_digit = 0
+    num_symbol = 0
+    num_word = 0
+    num_sentence = 0
+    num_paragraph = 0
+    last_char = None
+    last_line_is_empty_line = False
+    word_start = False
+    paragraph_start = False
     with open(filename, 'r') as f:
-        num_alpha = 0
-        num_digit = 0
-        num_symbol = 0
-        num_word = 0
-        num_sentence = 0
-        num_paragraph = 0
-        last = None
-        word_started = False
         for i in f.read():
+            paragraph_start = True
             if i.isalpha():
                 num_alpha += 1
-                if str(last).isspace():
-                    word_started = True
+                word_start = True
             elif i == '\n':
                 # TODO paragraph
-                if last == '\n':
-                    num_paragraph += 1
-                word_started = False
-            elif i.isspace():
-                if word_started:
+                if last_char == '\n':
+                    if not last_line_is_empty_line:
+                        num_paragraph += 1
+                    paragraph_start = False
+                    last_line_is_empty_line = True
+                else:
+                    last_line_is_empty_line = False
+                # word count
+                if word_start:
                     num_word += 1
-                    word_started = False
+                word_start = False
+
+            elif i.isspace():
+                if word_start:
+                    num_word += 1
+                    word_start = False
             elif i.isdigit():
                 num_digit += 1
-                word_started = False
+                word_start = True
             elif i == '.' or i == "?" or i == '!':
                 num_symbol += 1
                 num_sentence += 1
-                word_started = False
+                if word_start:
+                    num_word += 1
+                    word_start = False
+            elif i == ',':
+                num_symbol += 1
+                if word_start:
+                    num_word += 1
+                    word_start = False
             else:
                 num_symbol += 1
-                word_started = False
-            last = i
-        return [num_alpha, num_digit, num_symbol, num_word, num_sentence, num_paragraph]
+                if word_start:
+                    num_word += 1
+                    word_start = False
+            last_char = i
+
+    # Handle final paragraph without another empty line
+    if paragraph_start:
+        num_paragraph += 1
+
+    return (num_alpha, num_digit, num_symbol, num_word, num_sentence, num_paragraph)
 
 # Exercise 6 - List Depth
 
 
 def exercise6(l):
     # Recursive
-    table = 0
+    table = 1
     record = False
     for i in l:
         if type(i) == list:
-            record = False
+            record = True
             ab = exercise6(i)
             if ab > table:
                 table = ab
@@ -202,12 +233,22 @@ def exercise6(l):
         return 1
     else:
         return table + 1
-
+        
+        
 
 # Exercise 7 - Change, please
 
 
 def exercise7(amount, coins):
+    possible_coins = (2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01)
+    possible = False
+    # dummy method: all possible coins structure
+    for i in possible_coins:
+        if coins * i > amount:
+            pass
+        else:
+            exercise7(coins)
+    
     return None
 
 # Exercise 8 - Five Letter Unscramble
@@ -230,8 +271,5 @@ def exercise10(green, yellow, gray):
 
 
 ### debug start ###
-print(exercise5('test_data/text1.txt'), "need: (128, 8, 10, 36, 3, 3)")
-print(exercise5('test_data/text2.txt'), "need: (84, 0, 3, 19, 1, 4)")
-print(exercise5('test_data/text3.txt'), "need: ((81, 3, 12, 20, 2, 1)")
-print(exercise5('test_data/text4.txt'), "need: (310, 0, 15, 74, 5, 3)")
+print(exercise6([1, [2, []], [4, 5]]), "need: 2")
 ### debug end ###
