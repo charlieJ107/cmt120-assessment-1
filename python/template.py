@@ -16,7 +16,7 @@ def exercise1(SepalLen, SepalWid, PetalLen, PetalWid):
             else:
                 return virginic
         else:
-            if PetalWid > 1.6:
+            if PetalWid >= 1.6:
                 if SepalLen < 7:
                     return versicol
                 else:
