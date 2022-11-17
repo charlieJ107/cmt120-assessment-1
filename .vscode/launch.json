@@ -9,10 +9,21 @@
             "type": "python",
             "request": "launch",
             "cwd": "${workspaceFolder}/python",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Python: Test Framework",
+            "type": "python",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/python",
             "program": "/home/zhuoling/Code/cardiff.ac.uk/cmt120/cmt120-assessment-1/python/testingFramework_4.py",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": ["template.py"],
+            "args": [
+                "template.py"
+            ],
         }
     ]
 }
