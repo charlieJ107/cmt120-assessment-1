@@ -146,13 +146,6 @@ def exercise4(trans: dict, init_state: str, input_list: list):
 
 # Exercise 5 - Document Stats
 
-# abcd\n
-# abcd\n
-# abcd\n
-# \n
-# bcde\n
-
-
 def exercise5(filename):
     num_alpha = 0
     num_digit = 0
@@ -171,7 +164,6 @@ def exercise5(filename):
                 num_alpha += 1
                 word_start = True
             elif i == '\n':
-                # TODO paragraph
                 if last_char == '\n':
                     if not last_line_is_empty_line:
                         num_paragraph += 1
@@ -218,7 +210,7 @@ def exercise5(filename):
 # Exercise 6 - List Depth
 
 
-def exercise6(l):
+def exercise6_rec(l):
     # Recursive
     table = 1
     record = False
@@ -233,6 +225,20 @@ def exercise6(l):
         return 1
     else:
         return table + 1
+
+def exercise6(l):
+    current_depth = 0
+    max_depth = 0
+    for i in str(l):
+        if i == '[':
+            # list start
+            current_depth+=1
+        elif i == ']':
+            # list end
+            if current_depth > max_depth:
+                max_depth = current_depth
+            current_depth -= 1
+    return max_depth - 1
         
         
 
@@ -241,13 +247,25 @@ def exercise6(l):
 
 def exercise7(amount, coins):
     possible_coins = (2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01)
-    possible = False
-    # dummy method: all possible coins structure
-    for i in possible_coins:
-        if coins * i > amount:
-            pass
-        else:
-            exercise7(coins)
+
+    # The worse idea, use 1p coin only
+    coins_needed = [int(amount/0.01) for _ in range(int(amount/0.01) + 1)]
+    for still_need_amount in len(coins_needed):
+        for this_kind_of_coin in possible_coins:
+            if amount - this_kind_of_coin > 0:
+                # if amount - current_coin < 0, this coin is too much for this amount
+                
+                # we still need one more coin to have this amount
+                coins_needed[still_need_amount] = min(
+                    coins_needed[still_need_amount - this_kind_of_coin] + 1, # at this amount of changes, use this kind of coin will be better (less use of coins)
+                    coins_needed[still_need_amount] # or other kind of coins is good enough
+                    )
+    return coins_needed[amount] > coins
+                
+
+                
+
+
     
     return None
 
