@@ -18,7 +18,7 @@
             "type": "python",
             "request": "launch",
             "cwd": "${workspaceFolder}/python",
-            "program": "/home/zhuoling/Code/cardiff.ac.uk/cmt120/cmt120-assessment-1/python/testingFramework_4.py",
+            "program": "${workspaceFolder}/python/testingFramework_4.py",
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": [
