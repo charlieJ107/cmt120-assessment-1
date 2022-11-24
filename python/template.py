@@ -246,11 +246,12 @@ def exercise6(l):
 
 
 def exercise7(amount, coins):
-    possible_coins = (2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01)
-
+    # TODO Debug
+    possible_coins = (200, 100, 50, 20, 10, 5, 2, 1)
+    amount = int(amount * 100)
     # The worse idea, use 1p coin only
-    coins_needed = [int(amount/0.01) for _ in range(int(amount/0.01) + 1)]
-    for still_need_amount in len(coins_needed):
+    coins_needed = [amount+1 for _ in range(amount + 1)]
+    for still_need_amount in range(len(coins_needed)):
         for this_kind_of_coin in possible_coins:
             if amount - this_kind_of_coin > 0:
                 # if amount - current_coin < 0, this coin is too much for this amount
@@ -266,20 +267,56 @@ def exercise7(amount, coins):
                 
 
 
-    
-    return None
-
 # Exercise 8 - Five Letter Unscramble
 
 
 def exercise8(s):
-    return None
-
+    origin = s # backup s since we will pop founded characters in s
+    count = 0
+    with open("test_data/wordle.txt", 'r', encoding="utf-8") as f:
+        for i in f.readlines(): 
+            i = i.replace("\n", "")
+            all_c_in_i_is_in_s = False
+            for c in i: # O(n) since len(i) is always 5
+                if c in s:
+                    all_c_in_i_is_in_s = True
+                    s = s.replace(c, "", 1) # pop founded characters in s
+                else: 
+                    all_c_in_i_is_in_s = False
+                    break
+            if all_c_in_i_is_in_s:
+                count += 1
+            s = origin # restore s from backup
+    return count
 # Exercise 9 - Wordle Set
 
 
 def exercise9(green, yellow, gray):
-    return None
+    res = []
+    with open("test_data/wordle.txt", 'r', encoding="utf-8") as f:
+        for word in f.readlines():
+            word = word.replace("\n", "")
+            not_this_word = False
+            for char_index in range(len(word)):
+                for y in yellow.keys():
+                    if y not in word:
+                        not_this_word = True
+                        break
+                if word[char_index] in gray:
+                    not_this_word = True
+                    break
+                elif word[char_index] in yellow.keys() and char_index==yellow[word[char_index]]:
+                    not_this_word = True
+                    break
+                elif char_index in green.keys() and word[char_index] != green[char_index]:
+                    not_this_word = True
+                    break
+            if not_this_word:
+                continue
+            else:
+                # res += 1
+                res.append(word)
+    return len(res)
 
 # Exercise 10 - One Step of Wordle
 
@@ -289,5 +326,19 @@ def exercise10(green, yellow, gray):
 
 
 ### debug start ###
-print(exercise6([1, [2, []], [4, 5]]), "need: 2")
+green_1 = {1:'i',3:'c'}
+yellow_1 = {'e':{3}}
+gray_1 = {'r','a','s','d','f'}
+green_2 = {2:'a'}
+yellow_2 = {'a':{3},'i':{2},'l':{3,4},'r':{1}}
+gray_2={'e','t','u','o','p','g','h','c','m','s'}
+green_3 = {}
+yellow_3 = {'r':{1},'i':{2},'l':{3}}
+gray_3 = {'g','o','u','p','c','h'}
+green_4 = {4:'r'}
+yellow_4 = {'r':{1},'i':{1,2},'l':{0,3}}
+gray_4 = {'g','o','u','p','c','h','t','e'}
+print(exercise9(green_2,yellow_2,gray_2), "need: 3")
+print(exercise9(green_3,yellow_3,gray_3), "need: 38")
+print(exercise9(green_4,yellow_4,gray_4), "need: 1")
 ### debug end ###
