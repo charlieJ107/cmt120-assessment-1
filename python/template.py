@@ -238,7 +238,7 @@ def exercise6(l):
             if current_depth > max_depth:
                 max_depth = current_depth
             current_depth -= 1
-    return max_depth - 1
+    return max_depth
         
         
 
@@ -250,7 +250,7 @@ def exercise7(amount, coins):
     possible_coins = (200, 100, 50, 20, 10, 5, 2, 1)
     amount = int(amount * 100)
     # The worse idea, use 1p coin only
-    coins_needed = [amount+1 for _ in range(amount + 1)]
+    coins_needed = [int(amount/0.01) for _ in range(int(amount/0.01) + 1)]
     for still_need_amount in range(len(coins_needed)):
         for this_kind_of_coin in possible_coins:
             if amount - this_kind_of_coin > 0:
@@ -262,10 +262,6 @@ def exercise7(amount, coins):
                     coins_needed[still_need_amount] # or other kind of coins is good enough
                     )
     return coins_needed[amount] > coins
-                
-
-                
-
 
 # Exercise 8 - Five Letter Unscramble
 
