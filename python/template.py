@@ -292,7 +292,7 @@ def exercise8(s):
 
 
 def exercise9(green, yellow, gray):
-    res = []
+    res = 0
     with open("test_data/wordle.txt", 'r', encoding="utf-8") as f:
         for word in f.readlines():
             word = word.replace("\n", "")
@@ -302,21 +302,24 @@ def exercise9(green, yellow, gray):
                     if y not in word:
                         not_this_word = True
                         break
+                if not_this_word: 
+                    break
                 if word[char_index] in gray:
                     not_this_word = True
                     break
-                elif word[char_index] in yellow.keys() and char_index==yellow[word[char_index]]:
-                    not_this_word = True
-                    break
+                elif word[char_index] in yellow.keys():
+                    for yellow_num in yellow[word[char_index]]:
+                        if char_index==yellow_num:
+                            not_this_word = True
+                            break
+                    if not_this_word:
+                        break
                 elif char_index in green.keys() and word[char_index] != green[char_index]:
                     not_this_word = True
                     break
-            if not_this_word:
-                continue
-            else:
-                # res += 1
-                res.append(word)
-    return len(res)
+            if not not_this_word:
+                res += 1
+    return res
 
 # Exercise 10 - One Step of Wordle
 
