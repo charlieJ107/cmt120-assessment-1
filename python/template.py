@@ -270,13 +270,14 @@ def exercise8(s):
     origin = s # backup s since we will pop founded characters in s
     count = 0
     with open("test_data/wordle.txt", 'r', encoding="utf-8") as f:
-        for i in f.readlines(): 
+        for i in f.readlines(): # i: each word in wordle set
             i = i.replace("\n", "")
             all_c_in_i_is_in_s = False
-            for c in i: # O(n) since len(i) is always 5
+            for c in i: # c: each character in a word from wordle set
+                # O(n) if len(i) is always 5, aka. length of every word in wordle set is 5
                 if c in s:
                     all_c_in_i_is_in_s = True
-                    s = s.replace(c, "", 1) # pop founded characters in s
+                    s = s.replace(c, "", 1) # pop founded characters from s
                 else: 
                     all_c_in_i_is_in_s = False
                     break
@@ -284,11 +285,11 @@ def exercise8(s):
                 count += 1
             s = origin # restore s from backup
     return count
+
 # Exercise 9 - Wordle Set
 
-
 def exercise9(green, yellow, gray):
-    res = 0
+    res = []
     with open("test_data/wordle.txt", 'r', encoding="utf-8") as f:
         for word in f.readlines():
             word = word.replace("\n", "")
@@ -303,19 +304,20 @@ def exercise9(green, yellow, gray):
                 if word[char_index] in gray:
                     not_this_word = True
                     break
-                elif word[char_index] in yellow.keys():
+                if word[char_index] in yellow.keys():
                     for yellow_num in yellow[word[char_index]]:
                         if char_index==yellow_num:
                             not_this_word = True
                             break
                     if not_this_word:
                         break
-                elif char_index in green.keys() and word[char_index] != green[char_index]:
+                if char_index in green.keys() and word[char_index] != green[char_index]:
                     not_this_word = True
                     break
             if not not_this_word:
-                res += 1
-    return res
+                # res += 1
+                res.append(word)
+    return len(res)
 
 # Exercise 10 - One Step of Wordle
 
@@ -325,19 +327,6 @@ def exercise10(green, yellow, gray):
 
 
 ### debug start ###
-green_1 = {1:'i',3:'c'}
-yellow_1 = {'e':{3}}
-gray_1 = {'r','a','s','d','f'}
-green_2 = {2:'a'}
-yellow_2 = {'a':{3},'i':{2},'l':{3,4},'r':{1}}
-gray_2={'e','t','u','o','p','g','h','c','m','s'}
-green_3 = {}
-yellow_3 = {'r':{1},'i':{2},'l':{3}}
-gray_3 = {'g','o','u','p','c','h'}
-green_4 = {4:'r'}
-yellow_4 = {'r':{1},'i':{1,2},'l':{0,3}}
-gray_4 = {'g','o','u','p','c','h','t','e'}
-print(exercise9(green_2,yellow_2,gray_2), "need: 3")
-print(exercise9(green_3,yellow_3,gray_3), "need: 38")
-print(exercise9(green_4,yellow_4,gray_4), "need: 1")
+print(exercise7(5, 2), "needed False")
+print(exercise7(1.15, 2), "needed False")
 ### debug end ###
