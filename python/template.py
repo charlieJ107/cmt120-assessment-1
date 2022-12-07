@@ -256,12 +256,10 @@ def exercise7(amount, coins):
             # if amount_still_needed - value_of_this_coin < 0, this coin is too much for this amount
             if value_of_this_coin <= amount_still_needed:
                 # coins you need if you have one more this coin < coins you need if you have one more 1p 
-                if coins_needed[amount_still_needed - value_of_this_coin] < coins_needed[amount_still_needed] + 1:
+                if coins_needed[amount_still_needed] > coins_needed[amount_still_needed - value_of_this_coin] + 1 :
                     # Number of coins you need for amount_still_needed can be updated as one more this coin + number of coins you need for amount that without this coin
                     coins_needed[amount_still_needed] = coins_needed[amount_still_needed - value_of_this_coin] + 1
     return coins_needed[amount] <= coins
-
-
 # Exercise 8 - Five Letter Unscramble
 
 
@@ -290,28 +288,22 @@ def exercise8(s):
 # time: O(1)
 # space: O(1)
 def satisfiedWordleRule(word, green, yellow, gray):
-    not_this_word = False
     for char_index in range(len(word)):
         for y in yellow.keys():
+            # Yellow rule
             if y not in word:
-                not_this_word = True
-                break
-        if not_this_word:
-            break
-        if word[char_index] in gray:
-            not_this_word = True
-            break
+                return False
         if word[char_index] in yellow.keys():
             for yellow_num in yellow[word[char_index]]:
                 if char_index == yellow_num:
-                    not_this_word = True
-                    break
-            if not_this_word:
-                break
+                    return False
+        # Gray rule
+        if word[char_index] in gray:
+            return False
+        # Green rule
         if char_index in green.keys() and word[char_index] != green[char_index]:
-            not_this_word = True
-            break
-    return not not_this_word
+            return False
+    return True
 
 
 def wordleSet(green, yellow, gray):
