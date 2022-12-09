@@ -245,15 +245,16 @@ module.exports = {
         } else {
             for (let x in possible_cois) {
                 if (amount >= x) {
-                    if ((amount - x == 0 && coins - 1 > 0) || (amount > x && coins - 1 == 0)):
-                        continue
-                    else
-                        if (func(round(amount - x, 2), coins - 1)):
-                            return true;
+                    if ((amount - x == 0 && coins - 1 > 0) || (amount > x && coins - 1 == 0)) { }
+                    continue
+                } else {
+                    if (func(round(amount - x, 2), coins - 1)) {
+                        return true;
+                    }
                 }
             }
-            return false
         }
+        return false
     },
 
     // Exercise 8 - Five Letter Unscramble
