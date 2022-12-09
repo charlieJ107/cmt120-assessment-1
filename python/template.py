@@ -36,46 +36,42 @@ def exercise1(SepalLen, SepalWid, PetalLen, PetalWid):
 
 
 def exercise2(breed, height, weight, male):
-    if male:
-        gender = "male"
-    else:
-        gender = "female"
     breedDict = {
         "Bulldog": {
-            "male": {
+            True: {
                 "height": 15,
                 "weight": 50
             },
-            "female": {
+            False: {
                 "height": 14,
                 "weight": 40
             }
         },
         "Dalmatian": {
-            "male": {
+            True: {
                 "height": 24,
                 "weight": 70
             },
-            "female": {
+            False: {
                 "height": 19,
                 "weight": 45
             }
         },
         "Maltese": {
-            "male": {
+            True: {
                 "height": 9,
                 "weight": 7
             },
-            "female": {
+            False: {
                 "height": 7,
                 "weight": 6
             }
         }
     }
-    minHeight = breedDict[breed][gender]["height"] * 0.9
-    maxHeight = breedDict[breed][gender]["height"] * 1.1
-    minWeight = breedDict[breed][gender]["weight"] * 0.9
-    maxWeight = breedDict[breed][gender]["weight"] * 1.1
+    minHeight = breedDict[breed][male]["height"] * 0.9
+    maxHeight = breedDict[breed][male]["height"] * 1.1
+    minWeight = breedDict[breed][male]["weight"] * 0.9
+    maxWeight = breedDict[breed][male]["weight"] * 1.1
 
     return minHeight <= height and height <= maxHeight and minWeight <= weight and weight <= maxWeight
 
@@ -175,7 +171,6 @@ def exercise5(filename):
                 if word_start:
                     num_word += 1
                 word_start = False
-
             elif i.isspace():
                 if word_start:
                     num_word += 1
@@ -209,24 +204,6 @@ def exercise5(filename):
 
 # Exercise 6 - List Depth
 
-
-def exercise6_rec(l):
-    # Recursive
-    table = 1
-    record = False
-    for i in l:
-        if type(i) == list:
-            record = True
-            ab = exercise6(i)
-            if ab > table:
-                table = ab
-
-    if record == False:
-        return 1
-    else:
-        return table + 1
-
-
 def exercise6(l):
     current_depth = 0
     max_depth = 0
@@ -244,7 +221,6 @@ def exercise6(l):
 
 # Exercise 7 - Change, please
 
-
 def exercise7(amount, coins):
     possible_coins = (1, 2, 5, 10, 20, 50, 100, 200)
     amount = int(amount * 100)
@@ -260,25 +236,25 @@ def exercise7(amount, coins):
                     # Number of coins you need for amount_still_needed can be updated as one more this coin + number of coins you need for amount that without this coin
                     coins_needed[amount_still_needed] = coins_needed[amount_still_needed - value_of_this_coin] + 1
     return coins_needed[amount] <= coins
-# Exercise 8 - Five Letter Unscramble
 
+# Exercise 8 - Five Letter Unscramble
 
 def exercise8(s):
     origin = s  # backup s since we will pop founded characters in s
     count = 0
     with open("test_data/wordle.txt", 'r', encoding="utf-8") as f:
-        for i in f.readlines():  # i: each word in wordle set
-            i = i.replace("\n", "")
-            all_c_in_i_is_in_s = False
-            for c in i:  # c: each character in a word from wordle set
+        for word_in_wordle in f.readlines():  # i: each word in wordle set
+            word_in_wordle = word_in_wordle.replace("\n", "")
+            all_char_in_wordle_is_in_s = False
+            for char_in_word in word_in_wordle:  # c: each character in a word from wordle set
                 # O(n) if len(i) is always 5, aka. length of every word in wordle set is 5
-                if c in s:
-                    all_c_in_i_is_in_s = True
-                    s = s.replace(c, "", 1)  # pop founded characters from s
+                if char_in_word in s:
+                    all_char_in_wordle_is_in_s = True
+                    s = s.replace(char_in_word, "", 1)  # pop founded characters from s
                 else:
-                    all_c_in_i_is_in_s = False
+                    all_char_in_wordle_is_in_s = False
                     break
-            if all_c_in_i_is_in_s:
+            if all_char_in_wordle_is_in_s:
                 count += 1
             s = origin  # restore s from backup
     return count
@@ -320,8 +296,7 @@ def wordleSet(green, yellow, gray):
 
 
 def exercise9(green, yellow, gray):
-    res = wordleSet(green, yellow, gray)
-    return len(res)
+    return len(wordleSet(green, yellow, gray))
 
 # Exercise 10 - One Step of Wordle
 
@@ -369,7 +344,7 @@ def exercise10(green: dict, yellow: dict, gray: set):
     sorted_score = sorted(score.keys(), key=lambda key: score[key])
     res = set({sorted_score[0]})
     for i in sorted_score:
-        if not score[i] > score[sorted_score[0]]:
+        if score[i] == score[sorted_score[0]]:
             res.add(i)
 
     return res
