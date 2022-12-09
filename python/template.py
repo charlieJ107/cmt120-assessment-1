@@ -203,7 +203,7 @@ def exercise5(filename):
     return (num_alpha, num_digit, num_symbol, num_word, num_sentence, num_paragraph)
 
 # Exercise 6 - List Depth
-
+# This version of code could only handle the list without any "[" or "]" as elements in list. 
 def exercise6(l):
     current_depth = 0
     max_depth = 0
