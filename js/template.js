@@ -1,9 +1,9 @@
 const { count } = require('console');
 const fs = require('fs');
 
-const char_in_word = (char, word)=>{
-    for(let c in word){
-        if(c === char){
+const char_in_word = (char, word) => {
+    for (let c in word) {
+        if (c === char) {
             return true;
         }
     }
@@ -11,17 +11,17 @@ const char_in_word = (char, word)=>{
 }
 // Helper function for ex9 and ex10
 
-function satisfiedWordleRule(word, green, yellow, gray){
-    for(let char_index = 0; char_index < word.length; char_index++ ){
+function satisfiedWordleRule(word, green, yellow, gray) {
+    for (let char_index = 0; char_index < word.length; char_index++) {
         // yellow rule
-        for (let y in Object.keys(yellow)){
-            if (!char_in_word(y, word)){
+        for (let y in Object.keys(yellow)) {
+            if (!char_in_word(y, word)) {
                 return false;
             }
         }
-        if (char_in_word(word[char_index], Object.keys(yellow))){
-            for(let yellow_num in yellow[word[char_index]]){
-                if (char_index === yellow_num){
+        if (char_in_word(word[char_index], Object.keys(yellow))) {
+            for (let yellow_num in yellow[word[char_index]]) {
+                if (char_index === yellow_num) {
                     return false;
                 }
             }
@@ -31,19 +31,19 @@ function satisfiedWordleRule(word, green, yellow, gray){
             return false;
         }
         // green rule
-        if (char_in_word(char_index, Object.keys(green)) && word[char_index] != green[char_index]){
+        if (char_in_word(char_index, Object.keys(green)) && word[char_index] != green[char_index]) {
             return false
         }
     }
     return true;
 }
 
-function wordleSet(green, yellow, gray){
+function wordleSet(green, yellow, gray) {
     res = [];
-    fs.readFile("test_data/wordle.txt", (err, data)=>{
+    fs.readFile("test_data/wordle.txt", (err, data) => {
         const wordle_text = data.toString();
-        for(let word in wordle_text.split("\n")){
-            if(satisfiedWordleRule(word, green, yellow, gray)){
+        for (let word in wordle_text.split("\n")) {
+            if (satisfiedWordleRule(word, green, yellow, gray)) {
                 res.push(word);
             }
         }
@@ -220,7 +220,7 @@ module.exports = {
     // Exercise 6 - List Depth
     exercise6: (l) => {
         let table = 1;
-        record = false;
+        let record = false;
         for (let e in l) {
             if (typeof e == typeof []) {
                 record = true;
@@ -239,27 +239,41 @@ module.exports = {
 
     // Exercise 7 - Change, please
     exercise7: (amount, coins) => {
-
+        let possible_cois = [2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01];
+        if (amount == coins == 0) {
+            return true;
+        } else {
+            for (let x in possible_cois) {
+                if (amount >= x) {
+                    if ((amount - x == 0 && coins - 1 > 0) || (amount > x && coins - 1 == 0)):
+                        continue
+                    else
+                        if (func(round(amount - x, 2), coins - 1)):
+                            return true;
+                }
+            }
+            return false
+        }
     },
-    
+
     // Exercise 8 - Five Letter Unscramble
     exercise8: (s) => {
         let count = 0;
-        const check_word = (word, wordle_list)=>{
-            for(let word_in_wordle in wordle_list){
+        const check_word = (word, wordle_list) => {
+            for (let word_in_wordle in wordle_list) {
                 word_to_check = word;
                 all_char_in_wordle_in_s = false;
-                for(let char in word_in_wordle){
-                    if (char_in_word(char, word_in_wordle)){
+                for (let char in word_in_wordle) {
+                    if (char_in_word(char, word_in_wordle)) {
                         all_char_in_wordle_in_s = true;
                         word_to_check.replace(char, "");
-                    }else {
+                    } else {
                         all_char_in_wordle_in_s = false;
                         break;
                     }
                 }
-                if (all_char_in_wordle_in_s){
-                    count ++;
+                if (all_char_in_wordle_in_s) {
+                    count++;
                 }
             }
         }
@@ -282,25 +296,25 @@ module.exports = {
     exercise10: (green, yellow, gray) => {
         const words = wordleSet(green, yellow, gray);
         let score = {};
-        for (let wrong_word_index = 0; wrong_word_index < words.length; wrong_word_index++){
+        for (let wrong_word_index = 0; wrong_word_index < words.length; wrong_word_index++) {
             wrong_word = words[wrong_word_index];
             score[wrong_word] = 0;
-            for(let correct_word in words){
-                if(correct_word === words[wrong_word_index]){
+            for (let correct_word in words) {
+                if (correct_word === words[wrong_word_index]) {
                     continue;
                 }
                 green_rule = {}
                 yellow_rule = {}
                 gray_rule = new Set();
-                for(let word_char_index = 0; word_char_index < wrong_word.lengthl; word_char_index++){
-                    if(wrong_word[word_char_index] === correct_word[word_char_index]){
+                for (let word_char_index = 0; word_char_index < wrong_word.lengthl; word_char_index++) {
+                    if (wrong_word[word_char_index] === correct_word[word_char_index]) {
                         green[word_char_index] = correct_word[word_char_index];
                     } else {
-                        if (char_in_word(wrong_word, correct_word)){
-                            if(yellow[wrong_word[word_char_index]]){
+                        if (char_in_word(wrong_word, correct_word)) {
+                            if (yellow[wrong_word[word_char_index]]) {
                                 yellow[wrong_word_index[word_char_index]].push(word_char_index);
                             } else {
-                                ellow[wrong_word_index[word_char_index]] = [word_char_index, ];
+                                ellow[wrong_word_index[word_char_index]] = [word_char_index,];
                             }
                         } else {
                             gray.add(wrong_word[word_char_index]);
@@ -308,10 +322,10 @@ module.exports = {
                     }
                 }
 
-                for (let word in words){
-                    if (satisfiedWordleRule(word, green_rule, yellow_rule, gray_rule)){
-                        if(score[wrong_word]){
-                            score[wrong_word]+=1;
+                for (let word in words) {
+                    if (satisfiedWordleRule(word, green_rule, yellow_rule, gray_rule)) {
+                        if (score[wrong_word]) {
+                            score[wrong_word] += 1;
                         } else {
                             score[wrong_word] = 1;
                         }
@@ -319,11 +333,11 @@ module.exports = {
                 }
             }
         }
-        const sorted_score = Object.keys(score).sort((a, b)=>score[a] - score[b]);
+        const sorted_score = Object.keys(score).sort((a, b) => score[a] - score[b]);
         let res = Set();
         res.add(sorted_score[0]);
-        for (let i in sorted_score){
-            if (score[i] <= score[sorted_score[0]]){
+        for (let i in sorted_score) {
+            if (score[i] <= score[sorted_score[0]]) {
                 res.add(i);
             }
         }
