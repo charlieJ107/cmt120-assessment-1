@@ -245,11 +245,10 @@ def exercise8(s):
     with open("test_data/wordle.txt", 'r', encoding="utf-8") as f:
         for word_in_wordle in f.readlines():  # i: each word in wordle set
             word_in_wordle = word_in_wordle.replace("\n", "")
-            all_char_in_wordle_is_in_s = False
+            all_char_in_wordle_is_in_s = True
             for char_in_word in word_in_wordle:  # c: each character in a word from wordle set
                 # O(n) if len(i) is always 5, aka. length of every word in wordle set is 5
                 if char_in_word in s:
-                    all_char_in_wordle_is_in_s = True
                     s = s.replace(char_in_word, "", 1)  # pop founded characters from s
                 else:
                     all_char_in_wordle_is_in_s = False

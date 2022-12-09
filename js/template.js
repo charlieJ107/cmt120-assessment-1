@@ -224,7 +224,7 @@ module.exports = {
         for (let e in l) {
             if (typeof e == typeof []) {
                 record = true;
-                let ab = this.exercise6(e);
+                let ab = exercise6(e);
                 if (ab > table) {
                     table = ab;
                 }
