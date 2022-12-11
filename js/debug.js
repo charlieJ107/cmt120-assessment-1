@@ -1,4 +1,10 @@
 const fs = require('fs');
+/**
+ * Check if char is in word. Acturally it can also be used to check if an element in an array
+ * @param {char} char 
+ * @param {string} word 
+ * @returns true if char appeard in word
+ */
 const char_in_word = (char, word) => {
     for (let c_index = 0; c_index < word.length; c_index++) {
         const c = word[c_index];
@@ -9,7 +15,14 @@ const char_in_word = (char, word) => {
     return false;
 }
 // Helper function for ex9 and ex10
-
+/**
+ * Check if a word satisfied the given wordle rules
+ * @param {string} word word to check
+ * @param {object} green green rule dictionary
+ * @param {object} yellow yellow rule dictionary
+ * @param {set} gray gray rule set
+ * @returns 
+ */
 function satisfiedWordleRule(word, green, yellow, gray) {
     // yellow rule
     // 1. letter in y (keys) shoud appeared in word
@@ -33,7 +46,7 @@ function satisfiedWordleRule(word, green, yellow, gray) {
         }
         // green rule
         // letter in word should appeared in green and in the green position
-        if (char_in_word(char_index, Object.keys(green).map(val => parseInt(val))) && word[char_index] != green[char_index]) {
+        if (char_in_word(char_index, Object.keys(green).map(val=>parseInt(val))) && word[char_index] != green[char_index]) {
             return false
         }
     }
@@ -42,7 +55,7 @@ function satisfiedWordleRule(word, green, yellow, gray) {
 
 function wordleSet(green, yellow, gray) {
     let res = [];
-    const wordle_text = fs.readFileSync("test_data/wordle.txt").toString().split("\n");
+    const wordle_text = fs.readFileSync("test_data/wordle.txt", {encoding: "utf-8"}).toString().split("\n");
     for (let word_index = 0; word_index < wordle_text.length; word_index++) {
         const word = wordle_text[word_index];
         if (satisfiedWordleRule(word, green, yellow, gray)) {
@@ -99,7 +112,7 @@ const exercise10 = (green, yellow, gray) => {
     res.add(sorted_score[0]);
     sorted_score.forEach((value) => {
         if (score[value] === score[sorted_score[0]]) {
-            res.add(value);
+            res.add(value.replace("\r", ""));
         }
     })
     return res;

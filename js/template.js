@@ -56,7 +56,7 @@ function satisfiedWordleRule(word, green, yellow, gray) {
 
 function wordleSet(green, yellow, gray) {
     let res = [];
-    const wordle_text = fs.readFileSync("test_data/wordle.txt").toString().split("\n");
+    const wordle_text = fs.readFileSync("test_data/wordle.txt", {encoding: "utf-8"}).toString().split("\n");
     for (let word_index = 0; word_index < wordle_text.length; word_index++) {
         const word = wordle_text[word_index];
         if (satisfiedWordleRule(word, green, yellow, gray)) {
@@ -222,7 +222,9 @@ module.exports = {
             /\S[\n][\n]/g // paragraph
         ];
         let res = [];
-        const text = fs.readFileSync(filename).toString();
+        
+        // remove "\r" to handle line breaks difference between unix style and windows
+        const text = fs.readFileSync(filename, {encoding: "utf-8"}).toString().replace(/\r/g, ""); 
         for (let i = 0; i < reg_arr.length; i++) {
             const reg = reg_arr[i];
             const match_arr = text.match(reg);
@@ -285,9 +287,9 @@ module.exports = {
     exercise8: (s) => {
         let count = 0;
         const origin = s; // Deep copy to a constant to backup value
-        const wordle_list = fs.readFileSync("test_data/wordle.txt").toString().split("\n");
+        const wordle_list = fs.readFileSync("test_data/wordle.txt", {encoding: "utf-8"}).toString().split("\n");
         for (let i = 0; i < wordle_list.length; i++) {
-            word_in_wordle = wordle_list[i];
+            word_in_wordle = wordle_list[i].replace("\r", ""); // remove "\r" to handle line breaks difference between unix style and windows
             let word_to_check = origin; // restore from backup
             let all_char_in_wordle_in_s = true;
             for (let char_index = 0; char_index < word_in_wordle.length; char_index++) {
@@ -357,10 +359,10 @@ module.exports = {
         // sort by score to get the best words
         const sorted_score = Object.keys(score).sort((a, b) => score[a] - score[b]);
         let res = new Set();
-        res.add(sorted_score[0]);
+        res.add(sorted_score[0].replace("\r", "")); // remove "\r" to handle line breaks difference between unix style and windows
         sorted_score.forEach((value) => {
             if (score[value] === score[sorted_score[0]]) {
-                res.add(value);
+                res.add(value.replace("\r", "")); // remove "\r" to handle line breaks difference between unix style and windows
             }
         })
         return res;
