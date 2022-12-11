@@ -5,6 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch Program",
+            "program": "${workspaceFolder}/js/debug.js",
+            "request": "launch",
+            "localRoot": "${workspaceFolder}/js",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+    
+        
+        {
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
