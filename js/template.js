@@ -7,7 +7,7 @@ const fs = require('fs');
  * @param {string} word 
  * @returns true if char appeard in word
  */
-const char_in_word = (char, word) => {
+const charInWord = (char, word) => {
     for (let c_index = 0; c_index < word.length; c_index++) {
         const c = word[c_index];
         if (c === char) {
@@ -30,7 +30,7 @@ function satisfiedWordleRule(word, green, yellow, gray) {
     // 1. letter in y (keys) shoud appeared in word
     for (let y_index = 0; y_index < Object.keys(yellow).length; y_index++) {
         const y = Object.keys(yellow)[y_index]; // y should be a letter
-        if (!char_in_word(y, word)) {
+        if (!charInWord(y, word)) {
             return false;
         }
     }
@@ -38,7 +38,7 @@ function satisfiedWordleRule(word, green, yellow, gray) {
     for (let char_index = 0; char_index < word.length; char_index++) {
         // yellow rule
         // 2.2 letter in y shoud not appear on y-value ( a set of positions) position. 
-        if (char_in_word(word[char_index], Object.keys(yellow)) && yellow[word[char_index]].has(char_index)) {
+        if (charInWord(word[char_index], Object.keys(yellow)) && yellow[word[char_index]].has(char_index)) {
             return false;
         }
         // gray rule
@@ -48,7 +48,7 @@ function satisfiedWordleRule(word, green, yellow, gray) {
         }
         // green rule
         // letter in word should appeared in green and in the green position
-        if (char_in_word(char_index, Object.keys(green).map(val=>parseInt(val))) && word[char_index] != green[char_index]) {
+        if (charInWord(char_index, Object.keys(green).map(val=>parseInt(val))) && word[char_index] != green[char_index]) {
             return false
         }
     }
@@ -199,7 +199,7 @@ module.exports = {
 
     // Exercise 4 - Finite-State Machine Simulator
     exercise4: (trans, init_state, input_list) => {
-        state_machine = {}
+        let state_machine = {}
         Object.keys(trans).forEach(element => {
             const input_and_state = element.split('/');
             const output_and_state = trans[element].split('/');
@@ -302,7 +302,7 @@ module.exports = {
             let all_char_in_wordle_in_s = true;
             for (let char_index = 0; char_index < word_in_wordle.length; char_index++) {
                 const char = word_in_wordle[char_index];
-                if (char_in_word(char, word_to_check)) {
+                if (charInWord(char, word_to_check)) {
                     word_to_check = word_to_check.replace(char, "");
                 } else {
                     all_char_in_wordle_in_s = false;
@@ -342,7 +342,7 @@ module.exports = {
                     if (wrong_word[word_char_index] === correct_word[word_char_index]) {
                         green[word_char_index] = correct_word[word_char_index];
                     } else {
-                        if (char_in_word(wrong_word[word_char_index], correct_word)) {
+                        if (charInWord(wrong_word[word_char_index], correct_word)) {
                             if (yellow[wrong_word[word_char_index]] === undefined) {
                                 yellow[wrong_word[word_char_index]] = new Set([word_char_index,]);
     

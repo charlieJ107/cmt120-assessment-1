@@ -34,6 +34,7 @@ def exercise1(SepalLen, SepalWid, PetalLen, PetalWid):
 
 # Exercise 2 - Dog Breeds Standards
 
+
 def exercise2(breed, height, weight, male):
     # build rule dictionary
     breedDict = {
@@ -69,12 +70,13 @@ def exercise2(breed, height, weight, male):
         }
     }
     # Calculate range limit
-    minHeight = breedDict[breed][male]["height"] * 0.9
-    maxHeight = breedDict[breed][male]["height"] * 1.1
-    minWeight = breedDict[breed][male]["weight"] * 0.9
-    maxWeight = breedDict[breed][male]["weight"] * 1.1
+    min_height = breedDict[breed][male]["height"] * 0.9
+    max_height = breedDict[breed][male]["height"] * 1.1
+    min_weight = breedDict[breed][male]["weight"] * 0.9
+    max_weight = breedDict[breed][male]["weight"] * 1.1
 
-    return minHeight <= height and height <= maxHeight and minWeight <= weight and weight <= maxWeight
+    return (min_height <= height and height <= max_height and 
+        min_weight <= weight and weight <= max_weight)
 
 
 # Exercise 3 - Basic Statistics
@@ -204,7 +206,10 @@ def exercise5(filename):
     return (num_alpha, num_digit, num_symbol, num_word, num_sentence, num_paragraph)
 
 # Exercise 6 - List Depth
-# This version of code could only handle the list without any "[" or "]" as elements in any list member. 
+# This version of code could only handle the list without any "[" or "]" as 
+# elements in any list member.
+
+
 def exercise6(l):
     current_depth = 0
     max_depth = 0
@@ -231,11 +236,15 @@ def exercise7(amount, coins):
     coins_needed[0] = 0
     for amount_still_needed in range(1, amount + 1):
         for value_of_this_coin in possible_coins:
-            # if amount_still_needed - value_of_this_coin < 0, this coin is too much for this amount
+            # if amount_still_needed - value_of_this_coin < 0, this coin is too
+            # much for this amount
             if value_of_this_coin <= amount_still_needed:
-                # coins you need if you have one more this coin < coins you need if you have one more 1p
+                # coins you need if you have one more this coin < coins you 
+                # need if you have one more 1p
                 if coins_needed[amount_still_needed] > coins_needed[amount_still_needed - value_of_this_coin] + 1:
-                    # Number of coins you need for amount_still_needed can be updated as one more this coin + number of coins you need for amount that without this coin
+                    # Number of coins you need for amount_still_needed can be 
+                    # updated as one more this coin + number of coins you need 
+                    # for amount that without this coin
                     coins_needed[amount_still_needed] = coins_needed[amount_still_needed -
                                                                      value_of_this_coin] + 1
     return coins_needed[amount] <= coins
@@ -250,8 +259,10 @@ def exercise8(s):
         for word_in_wordle in f.readlines():  # i: each word in wordle set
             word_in_wordle = word_in_wordle.replace("\n", "")
             all_char_in_wordle_is_in_s = True
-            for char_in_word in word_in_wordle:  # c: each character in a word from wordle set
-                # O(n) if len(i) is always 5, aka. length of every word in wordle set is 5
+            for char_in_word in word_in_wordle:  
+                # c: each character in a word from wordle set
+                # O(n) if len(i) is always 5, 
+                # aka. length of every word in wordle set is 5
                 if char_in_word in s:
                     # pop founded characters from s
                     s = s.replace(char_in_word, "", 1)
@@ -267,14 +278,15 @@ def exercise8(s):
 
 # time: O(n)
 # space: O(1)
+
+# Comments style referenced to Doxygen, avalible at:  https://www.doxygen.nl/manual/docblocks.html
 def satisfiedWordleRule(word, green, yellow, gray):
-    """
-    Check if the word satisfy with the given wordle rules
-    @param word: string, the word to check
-    @params green: dictionary of green rules
-    @params yellow: dictionary of yellow rules
-    @params gray: gray ruls set
-    @return: True if the word satisfy with the given wordle rules
+    """Check if the word satisfy with the given wordle rules
+    @param word     string, the word to check
+    @params green   dictionary of green rules
+    @params yellow  dictionary of yellow rules
+    @params gray    gray ruls set
+    @return   True if the word satisfy with the given wordle rules
     """
     for y in yellow.keys():
         # Yellow rule
@@ -295,13 +307,12 @@ def satisfiedWordleRule(word, green, yellow, gray):
 
 
 def wordleSet(green, yellow, gray):
-    '''
-    Create a set of wordle words satisfied given wordle rules
-    @params green: dictionary of green rules
-    @params yellow: dictionary of yellow rules
-    @params gray: gray ruls set
-    @returns: words set
-    '''
+    """Create a set of wordle words satisfied given wordle rules
+    @params green   dictionary of green rules
+    @params yellow dictionary of yellow rules
+    @params gray   gray ruls set
+    @return words set
+    """
     res = []
     with open("test_data/wordle.txt", 'r', encoding="utf-8") as f:
         for word in f.readlines():
@@ -330,7 +341,8 @@ def exercise10(green: dict, yellow: dict, gray: set):
             if correct_word == words[wrong_word_index]:
                 # iterate all word in words except the assumed wrong word
                 continue
-            # Rebuild  wordle rules (reuse the memory from parameters to reduce memory cost)
+            # Rebuild  wordle rules (reuse the memory from parameters to reduce
+            #  memory cost)
             green.clear()
             yellow.clear()
             gray.clear()
@@ -365,9 +377,3 @@ def exercise10(green: dict, yellow: dict, gray: set):
             res.add(i)
     return res
 
-
-# debug
-green_1 = {1: 'i', 3: 'c'}
-yellow_1 = {'e': {3}}
-gray_1 = {'r', 'a', 's', 'd', 'f'}
-print(exercise10(green_1, yellow_1, gray_1))
