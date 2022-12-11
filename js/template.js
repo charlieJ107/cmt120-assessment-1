@@ -2,6 +2,7 @@ const fs = require('fs');
 
 /**
  * Check if char is in word. Acturally it can also be used to check if an element in an array
+ * it's alternative to "if ... in .." of python
  * @param {char} char 
  * @param {string} word 
  * @returns true if char appeard in word
@@ -53,7 +54,13 @@ function satisfiedWordleRule(word, green, yellow, gray) {
     }
     return true;
 }
-
+/**
+ * Create a set of wordle words satisfied given wordle rules
+ * @param {object} green dictionary of green rules
+ * @param {object} yellow dictionary of yellow rules
+ * @param {Set} gray gray ruls set
+ * @returns words set
+ */
 function wordleSet(green, yellow, gray) {
     let res = [];
     const wordle_text = fs.readFileSync("test_data/wordle.txt", {encoding: "utf-8"}).toString().split("\n");
@@ -275,6 +282,7 @@ module.exports = {
             if (amount < coin_value) {
                 continue;
             } else {
+                // Use Math.round to fix decimal calcualtion error
                 if (module.exports.exercise7(Math.round((amount - coin_value) * 100) / 100, coins - 1)) {
                     return true;
                 }
