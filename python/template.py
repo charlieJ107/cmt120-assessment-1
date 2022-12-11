@@ -233,13 +233,15 @@ def exercise7(amount, coins):
         for value_of_this_coin in possible_coins:
             # if amount_still_needed - value_of_this_coin < 0, this coin is too much for this amount
             if value_of_this_coin <= amount_still_needed:
-                # coins you need if you have one more this coin < coins you need if you have one more 1p 
-                if coins_needed[amount_still_needed] > coins_needed[amount_still_needed - value_of_this_coin] + 1 :
+                # coins you need if you have one more this coin < coins you need if you have one more 1p
+                if coins_needed[amount_still_needed] > coins_needed[amount_still_needed - value_of_this_coin] + 1:
                     # Number of coins you need for amount_still_needed can be updated as one more this coin + number of coins you need for amount that without this coin
-                    coins_needed[amount_still_needed] = coins_needed[amount_still_needed - value_of_this_coin] + 1
+                    coins_needed[amount_still_needed] = coins_needed[amount_still_needed -
+                                                                     value_of_this_coin] + 1
     return coins_needed[amount] <= coins
 
 # Exercise 8 - Five Letter Unscramble
+
 
 def exercise8(s):
     origin = s  # backup s since we will pop founded characters in s
@@ -251,7 +253,8 @@ def exercise8(s):
             for char_in_word in word_in_wordle:  # c: each character in a word from wordle set
                 # O(n) if len(i) is always 5, aka. length of every word in wordle set is 5
                 if char_in_word in s:
-                    s = s.replace(char_in_word, "", 1)  # pop founded characters from s
+                    # pop founded characters from s
+                    s = s.replace(char_in_word, "", 1)
                 else:
                     all_char_in_wordle_is_in_s = False
                     break
@@ -262,7 +265,7 @@ def exercise8(s):
 
 # Helper function for ex9 and ex10
 
-# time: O(1)
+# time: O(n)
 # space: O(1)
 def satisfiedWordleRule(word, green, yellow, gray):
     """
@@ -273,11 +276,11 @@ def satisfiedWordleRule(word, green, yellow, gray):
     @params gray: gray ruls set
     @return: True if the word satisfy with the given wordle rules
     """
+    for y in yellow.keys():
+        # Yellow rule
+        if y not in word:
+            return False
     for char_index in range(len(word)):
-        for y in yellow.keys():
-            # Yellow rule
-            if y not in word:
-                return False
         if word[char_index] in yellow.keys():
             for yellow_num in yellow[word[char_index]]:
                 if char_index == yellow_num:
@@ -340,23 +343,20 @@ def exercise10(green: dict, yellow: dict, gray: set):
                     if wrong_word[word_char_index] in correct_word:
                         # Letter in wrong position but exist, set yellow rule
                         if wrong_word[word_char_index] in yellow.keys():
-                            yellow[wrong_word[word_char_index]].append(
+                            # yellow[wrong_word[word_char_index]] is not initialized
+                            yellow[wrong_word[word_char_index]].add(
                                 word_char_index)
                         else:
-                            yellow[wrong_word[word_char_index]] = [
-                                word_char_index, ]
+                            yellow[wrong_word[word_char_index]] = set([
+                                word_char_index, ])
                     else:
                         # Letter not exist, set gray rule
                         gray.add(wrong_word[word_char_index])
-
-            # Calculating wrong_word score with builded wordle rule
+            # Calculating wrong_word score
             for word in words:
                 if satisfiedWordleRule(word, green, yellow, gray):
-                    if wrong_word not in score.keys():
-                        score[wrong_word] = 1
-                    else:
-                        score[wrong_word] += 1
-    # sort the words with score
+                    score[wrong_word] += 1
+    # sort by score to get the best words
     sorted_score = sorted(score.keys(), key=lambda key: score[key])
     res = set({sorted_score[0]})
     for i in sorted_score:
@@ -364,3 +364,10 @@ def exercise10(green: dict, yellow: dict, gray: set):
             # select words with best score
             res.add(i)
     return res
+
+
+# debug
+green_1 = {1: 'i', 3: 'c'}
+yellow_1 = {'e': {3}}
+gray_1 = {'r', 'a', 's', 'd', 'f'}
+print(exercise10(green_1, yellow_1, gray_1))

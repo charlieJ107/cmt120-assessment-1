@@ -1,155 +1,122 @@
-const exercise1 = (SepalLen, SepalWid, PetalLen, PetalWid) => {
-    let setosa = "setosa";
-    let versicol = "versicolor";
-    let virginic = "virginica";
-    // [2, 2, 5.3, 1.6]
-    if (PetalLen < 2.5) {
-        return setosa;
-    } else if (PetalWid < 1.8) {
-        if (PetalLen < 5) {
-            if (PetalWid < 1.7) {
-                return versicol;
-            }
-            else {
-                return virginic;
-            }
-        } else {
-            if (PetalWid >= 1.6) {
-                if (PetalLen < 7) {
-                    return versicol;
-                } else {
-                    return virginic;
-                }
-            } else {
-                return virginic;
-            }
-        }
-    } else {
-        if (PetalLen < 4.9) {
-            if (SepalLen < 6) {
-                return versicol;
-            } else {
-                return virginic;
-            }
-        } else {
-            return virginic;
+const fs = require('fs');
+const char_in_word = (char, word) => {
+    for (let c_index = 0; c_index < word.length; c_index++) {
+        const c = word[c_index];
+        if (c === char) {
+            return true;
         }
     }
+    return false;
 }
-const exercise3 = (list) => {
-    const sorted_origin = list.sort((a, b) => a - b);
-    let sum_origin = 0;
-    let sum_squared = 0
-    let squared = [];
-    sorted_origin.forEach(element => {
-        sum_origin += element;
-        let sq = element * element;
-        squared.push(sq);
-        sum_squared += sq;
-    });
-    const sorted_squared = squared.sort((a, b) => a - b);
-    let mid_origin = 0;
-    let mid_squared = 0;
-    if (sorted_origin.length % 2 === 0) {
-        mid_origin = (sorted_origin[sorted_origin.length / 2 - 1] + sorted_origin[sorted_origin.length / 2]) / 2;
-        mid_squared = (sorted_squared[sorted_squared.length / 2 - 1] + sorted_squared[sorted_squared.length / 2]) / 2;
-    } else {
-        mid_origin = sorted_origin[Math.floor(sorted_origin.length / 2)];
-        mid_squared = sorted_squared[Math.floor(sorted_squared.length / 2)];
+// Helper function for ex9 and ex10
+
+function satisfiedWordleRule(word, green, yellow, gray) {
+    // yellow rule
+    // 1. letter in y (keys) shoud appeared in word
+    for (let y_index = 0; y_index < Object.keys(yellow).length; y_index++) {
+        const y = Object.keys(yellow)[y_index]; // y should be a letter
+        if (!char_in_word(y, word)) {
+            return false;
+        }
     }
-    const st_origin = [
-        sorted_origin[0], // min of origin
-        sum_origin / sorted_origin.length, // ave of origin
-        mid_origin, // mid of origin
-        sorted_origin[sorted_origin.length - 1] // max of origin
-    ];
-    const st_squared = [
-        sorted_squared[0], // min of squared
-        sum_squared / sorted_squared.length, // ave of squared
-        mid_squared,  // mid of squared
-        sorted_squared[sorted_squared.length - 1] // max of squred
-    ];
 
-    return [st_origin, st_squared];
-
+    for (let char_index = 0; char_index < word.length; char_index++) {
+        // yellow rule
+        // 2.2 letter in y shoud not appear on y-value ( a set of positions) position. 
+        if (char_in_word(word[char_index], Object.keys(yellow)) && yellow[word[char_index]].has(char_index)) {
+            return false;
+        }
+        // gray rule
+        // letter in word should not appeard in gray
+        if (gray.has(word[char_index])) {
+            return false;
+        }
+        // green rule
+        // letter in word should appeared in green and in the green position
+        if (char_in_word(char_index, Object.keys(green).map(val => parseInt(val))) && word[char_index] != green[char_index]) {
+            return false
+        }
+    }
+    return true;
 }
 
-const EXERCISE4_TESTS = [
-    {
-        input: [{ "a/0": "a/1", "a/1": "a/0" },
-            'a',
-        ['0', '0', '1', '1', '0', '0']
-        ],
-        output: ['1', '1', '0', '0', '1', '1']
-    },
-    {
-        input: [
-            { "a/0": "a/1", "a/1": "b/0", "b/0": "b/0", "b/1": "a/1" },
-            'a',
-            ['0', '0', '1', '1', '0', '0']
-        ],
-        output: ['1', '1', '0', '1', '1', '1']
-    },
-    {
-        input: [
-            {
-                "0/0": "0/NaN",
-                "0/1": "0/NaN",
-                "0/\n": "0/0",
-                "1/0": "0/NaN",
-                "1/1": "1/NaN",
-                "1/\n": "1/1",
-            },
-            '1',
-            ['1', '1', '\n']
-        ],
-        output: ['NaN', 'NaN', '1']
-    },
-    {
-        input: [
-            {
-                "0/0": "0/NaN",
-                "0/1": "0/NaN",
-                "0/\n": "0/0",
-                "1/0": "0/NaN",
-                "1/1": "1/NaN",
-                "1/\n": "1/1",
-            },
-            '1',
-            ['1', '0', '1', '\n']
-        ],
-        output: ['NaN', 'NaN', 'NaN', '0']
-    }
-]
-
-const exercise4 = (trans, init_state, input_list) => {
-    state_machine = {}
-    Object.keys(trans).forEach(element => {
-        const input_and_state = element.split('/');
-        const output_and_state = trans[element].split('/');
-        const input_state = input_and_state[0];
-        const input = input_and_state[1];
-        if (state_machine[input_state] === undefined) {
-            state_machine[input_state] = {};
-        }
-        state_machine[input_state][input] = output_and_state;
-    });
+function wordleSet(green, yellow, gray) {
     let res = [];
-    input_list.forEach(element => {
-        res.push(state_machine[init_state][element][1])
-        init_state = state_machine[init_state][element][0]
-    });
-    return res
+    const wordle_text = fs.readFileSync("test_data/wordle.txt").toString().split("\n");
+    for (let word_index = 0; word_index < wordle_text.length; word_index++) {
+        const word = wordle_text[word_index];
+        if (satisfiedWordleRule(word, green, yellow, gray)) {
+            res.push(word);
+        }
+    }
+
+    return res;
 }
 
+const exercise10 = (green, yellow, gray) => {
+    const words = wordleSet(green, yellow, gray);
+    let score = {};
+    for (let wrong_word_index = 0; wrong_word_index < words.length; wrong_word_index++) {
+        const wrong_word = words[wrong_word_index];
+        score[wrong_word] = 0;
+        for (let correct_word_index = 0; correct_word_index < words.length; correct_word_index++) {
+            if (correct_word_index === wrong_word_index) {
+                // iterate all word except wrong word
+                continue;
+            }
+            const correct_word = words[correct_word_index];
+            // Rebuild new wordle rules
+            green = {}
+            yellow = {}
+            gray = new Set();
+            for (let word_char_index = 0; word_char_index < wrong_word.length; word_char_index++) {
+                if (wrong_word[word_char_index] === correct_word[word_char_index]) {
+                    green[word_char_index] = correct_word[word_char_index];
+                } else {
+                    if (char_in_word(wrong_word[word_char_index], correct_word)) {
+                        if (yellow[wrong_word[word_char_index]] === undefined) {
+                            yellow[wrong_word[word_char_index]] = new Set([word_char_index,]);
 
-const res = exercise4({
-    "0/0": "0/NaN",
-    "0/1": "0/NaN",
-    "0/\n": "0/0",
-    "1/0": "0/NaN",
-    "1/1": "1/NaN",
-    "1/\n": "1/1",
-}, '1', ['1', '0', '1', '\n']);
-console.log(res);
-//['1', '1', '0', '1', '1', '1']
+                        } else {
+                            yellow[wrong_word[word_char_index]].add(word_char_index);
+                        }
+                    } else {
+                        gray.add(wrong_word[word_char_index]);
+                    }
+                }
+            }
+            console.log(1)
+            for (let word_index = 0; word_index < words.length; word_index++) {
+                const word = words[word_index];
+                if (satisfiedWordleRule(word, green, yellow, gray)) {
+                    score[wrong_word] += 1;
+                }
+            }
+        }
+    }
+    const sorted_score = Object.keys(score).sort((a, b) => score[a] - score[b]);
+    let res = new Set();
+    res.add(sorted_score[0]);
+    sorted_score.forEach((value) => {
+        if (score[value] === score[sorted_score[0]]) {
+            res.add(value);
+        }
+    })
+    return res;
+}
+const green_1 = { 1: 'i', 3: 'c' }
+const yellow_1 = { 'e': new Set([3]) }
+const gray_1 = new Set(['r', 'a', 's', 'd', 'f'])
+
+const green_2 = { 2: 'a' }
+const yellow_2 = { 'a': new Set([3]), 'i': new Set([2]), 'l': new Set([3, 4]), 'r': new Set([1]) }
+const gray_2 = new Set(['e', 't', 'u', 'o', 'p', 'g', 'h', 'c', 'm', 's'])
+
+const green_3 = {}
+const yellow_3 = { 'r': new Set([1]), 'i': new Set([2]), 'l': new Set([3]) }
+const gray_3 = new Set(['g', 'o', 'u', 'p', 'c', 'h'])
+
+const green_4 = { 4: 'r' }
+const yellow_4 = { 'r': new Set([1]), 'i': new Set([1, 2]), 'l': new Set([0, 3]) }
+const gray_4 = new Set(['g', 'o', 'u', 'p', 'c', 'h', 't', 'e'])
+console.log(exercise10(green_1, yellow_1, gray_1))
