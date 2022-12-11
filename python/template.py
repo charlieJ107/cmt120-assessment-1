@@ -34,8 +34,8 @@ def exercise1(SepalLen, SepalWid, PetalLen, PetalWid):
 
 # Exercise 2 - Dog Breeds Standards
 
-
 def exercise2(breed, height, weight, male):
+    # build rule dictionary
     breedDict = {
         "Bulldog": {
             True: {
@@ -68,6 +68,7 @@ def exercise2(breed, height, weight, male):
             }
         }
     }
+    # Calculate range limit
     minHeight = breedDict[breed][male]["height"] * 0.9
     maxHeight = breedDict[breed][male]["height"] * 1.1
     minWeight = breedDict[breed][male]["weight"] * 0.9
@@ -203,7 +204,7 @@ def exercise5(filename):
     return (num_alpha, num_digit, num_symbol, num_word, num_sentence, num_paragraph)
 
 # Exercise 6 - List Depth
-# This version of code could only handle the list without any "[" or "]" as elements in list. 
+# This version of code could only handle the list without any "[" or "]" as elements in any list member. 
 def exercise6(l):
     current_depth = 0
     max_depth = 0
@@ -214,6 +215,7 @@ def exercise6(l):
         elif i == ']':
             # list end
             if current_depth > max_depth:
+                # deeper than before, update max depth
                 max_depth = current_depth
             current_depth -= 1
     return max_depth
@@ -263,6 +265,14 @@ def exercise8(s):
 # time: O(1)
 # space: O(1)
 def satisfiedWordleRule(word, green, yellow, gray):
+    """
+    Check if the word satisfy with the given wordle rules
+    @param word: string, the word to check
+    @params green: dictionary of green rules
+    @params yellow: dictionary of yellow rules
+    @params gray: gray ruls set
+    @return: True if the word satisfy with the given wordle rules
+    """
     for char_index in range(len(word)):
         for y in yellow.keys():
             # Yellow rule
@@ -282,12 +292,19 @@ def satisfiedWordleRule(word, green, yellow, gray):
 
 
 def wordleSet(green, yellow, gray):
+    '''
+    Create a set of wordle words satisfied given wordle rules
+    @params green: dictionary of green rules
+    @params yellow: dictionary of yellow rules
+    @params gray: gray ruls set
+    @returns: words set
+    '''
     res = []
     with open("test_data/wordle.txt", 'r', encoding="utf-8") as f:
         for word in f.readlines():
             word = word.replace("\n", "")
             if satisfiedWordleRule(word, green, yellow, gray):
-                # res += 1
+                # res += 1 # will cost less memory but losing word set info that needed in ex10
                 res.append(word)
     return res
 
@@ -310,7 +327,7 @@ def exercise10(green: dict, yellow: dict, gray: set):
             if correct_word == words[wrong_word_index]:
                 # iterate all word in words except the assumed wrong word
                 continue
-            # Rebuild  wordle rules
+            # Rebuild  wordle rules (reuse the memory from parameters to reduce memory cost)
             green.clear()
             yellow.clear()
             gray.clear()
@@ -332,18 +349,18 @@ def exercise10(green: dict, yellow: dict, gray: set):
                         # Letter not exist, set gray rule
                         gray.add(wrong_word[word_char_index])
 
-            # Calculating wrong_word score
+            # Calculating wrong_word score with builded wordle rule
             for word in words:
                 if satisfiedWordleRule(word, green, yellow, gray):
                     if wrong_word not in score.keys():
                         score[wrong_word] = 1
                     else:
                         score[wrong_word] += 1
-
+    # sort the words with score
     sorted_score = sorted(score.keys(), key=lambda key: score[key])
     res = set({sorted_score[0]})
     for i in sorted_score:
         if score[i] == score[sorted_score[0]]:
+            # select words with best score
             res.add(i)
-
     return res
